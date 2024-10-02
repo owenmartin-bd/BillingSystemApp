@@ -1,11 +1,66 @@
 ﻿@page "/billing"
+@rendermode InteractiveServer
+@inject NavigationManager Nav
+@inject ApplicationDbContext DbContext
 
+@if(openingInvoices != null && openingInvoices.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Client Id</th>
+                <th scope="col">Link Service Id</th>
+                <th scope="col">BillingStartDate</th>
+                <th scope="col">BillingEndDate</th>
+                <th scope="col">BillingDurationDays</th>
+                <th scope="col">DaysInMonths</th>
+                <th scope="col">BillingYear</th>
+                <th scope="col">BillingMonth</th>
+                <th scope="col">CapacityQty</th>
+                <th scope="col">Rate</th>
+                <th scope="col">BillAmount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var oIn in this.openingInvoices)
+            {
+
+
+
+                <tr>
+                    <td>@oIn.ClientId</td>
+                    <td>@oIn.LinkServiceId</td>
+                    <td>@oIn.BillingStartDate</td>
+                    <td>@oIn.BillingEndDate</td>
+                    <td>@oIn.BillingDurationDays</td>
+                    <td>@oIn.DaysInMonths</td>
+                    <td>@oIn.BillingYear</td>
+                    <td>@oIn.BillingMonth</td>
+                    <td>@oIn.CapacityQty</td>
+                    <td>@oIn.Rate</td>
+                    <td>@oIn.BillAmount</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm"
+                                @onclick="@(() => Nav.NavigateTo($"/edit-bill/{oIn.Id}"))">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            }
+           @*  <Virtualize Items="this.openingInvoices" Context="oIn">
+                
+            </Virtualize> *@
+        </tbody>
+    </table>
+}
 
 @code {
 
+    private List<OpeningInvoice>? openingInvoices { get; set; }
 
-    protected override OnInittialized() 
+    protected override void OnInitialized()
     {
-        
+        openingInvoices = DbContext.OpeningInvoices.ToList();
     }
 }

@@ -1,0 +1,40 @@
+﻿@page "/edit-bill/{Id:int}"
+@inject ApplicationDbContext DbContext
+@rendermode InteractiveServer
+
+@if(openingInvoice != null)
+{
+    <EditForm Model="openingInvoice">
+        <div class="row">
+            <div class="col-4">
+                <InputNumber @bind-Value="openingInvoice.CapacityQty"></InputNumber>
+            </div>
+            <div class="col-4">
+                <InputNumber @bind-Value="openingInvoice.Rate"></InputNumber>
+            </div>
+            <div class="col-4">
+                <button type="submit" @onclick="UpdateBill">Save</button>
+            </div>
+        </div>
+        
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private OpeningInvoice? openingInvoice { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        openingInvoice = DbContext.OpeningInvoices.Where(i => i.Id == Id).FirstOrDefault();
+    }
+
+    private void UpdateBill()
+    {
+        
+
+    }
+}
